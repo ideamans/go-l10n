@@ -223,7 +223,7 @@ go test -run TestT_BasicTranslation ./...
 
 ## ライセンス
 
-[ライセンス情報をここに追加してください]
+このプロジェクトはMITライセンスの下でライセンスされています。詳細は[LICENSE](LICENSE)ファイルをご覧ください。
 
 ---
 
