@@ -169,6 +169,28 @@ Detects and sets the language from environment variables.
 l10n.DetectLanguage()
 ```
 
+## Examples
+
+The `examples/` directory contains practical examples demonstrating various usage patterns:
+
+- **[Basic Example](examples/basic/)**: Demonstrates fundamental usage including translations, language switching, and environment variables
+- **[Modular Example](examples/modular/)**: Shows how to organize translations in a multi-package application
+
+To run the examples:
+
+```bash
+# Run basic example
+cd examples/basic
+go run main.go
+
+# Run with Japanese locale
+LANG=ja_JP.UTF-8 go run main.go
+
+# Run modular example
+cd examples/modular
+go run .
+```
+
 ## Usage Examples
 
 ### Translation Registration Across Multiple Packages

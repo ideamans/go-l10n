@@ -1,51 +1,157 @@
-name: Tests
+name: Test
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: ["**"]
   pull_request:
-    branches: [ main, develop ]
+    branches: ["**"]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: ['1.24']
+        go-version: ["1.21", "1.22", "1.23"]
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: ${{ matrix.go-version }}
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
 
-    - name: Cache Go modules
-      uses: actions/cache@v4
-      with:
-        path: ~/go/pkg/mod
-        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-go-
+      - name: Get dependencies
+        run: |
+          go mod download
+          go mod verify
 
-    - name: Download dependencies
-      run: go mod download
+      - name: Run tests
+        run: go test -v ./...
 
-    - name: Verify dependencies
-      run: go mod verify
+      - name: Run vet
+        run: go vet ./...
 
-    - name: Run go vet
-      run: go vet ./...
+      - name: Run gofmt
+        run: |
+          if [ -n "$(gofmt -l .)" ]; then
+            echo "Go code is not formatted:"
+            gofmt -d .
+            exit 1
+          fi
 
-    - name: Run tests
-      run: go test -race -coverprofile=coverage.out ./...
+      - name: Build library
+        run: go build ./...
 
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        file: ./coverage.out
-        flags: unittests
-        name: codecov-umbrella
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - name: Test basic example - Default language
+        run: |
+          cd examples/basic
+          go mod download
+          echo "=== Testing with default language ==="
+          go run main.go
+
+      - name: Test basic example - Japanese
+        run: |
+          cd examples/basic
+          echo "=== Testing with Japanese (LANG=ja_JP.UTF-8) ==="
+          LANG=ja_JP.UTF-8 go run main.go
+
+      - name: Test basic example - English
+        run: |
+          cd examples/basic
+          echo "=== Testing with English (LANG=en_US.UTF-8) ==="
+          LANG=en_US.UTF-8 go run main.go
+
+      - name: Test basic example - Various environment variables
+        run: |
+          cd examples/basic
+          echo "=== Testing with LC_ALL=ja_JP.UTF-8 ==="
+          LC_ALL=ja_JP.UTF-8 go run main.go | head -20
+          echo ""
+          echo "=== Testing with LC_MESSAGES=ja ==="
+          LC_MESSAGES=ja go run main.go | head -20
+          echo ""
+          echo "=== Testing with LANGUAGE=ja ==="
+          LANGUAGE=ja go run main.go | head -20
+
+      - name: Test modular example - Default language
+        run: |
+          cd examples/modular
+          go mod download
+          echo "=== Testing modular example with default language ==="
+          go run main.go
+
+      - name: Test modular example - Japanese
+        run: |
+          cd examples/modular
+          echo "=== Testing modular example with Japanese ==="
+          LANG=ja_JP.UTF-8 go run main.go
+
+      - name: Test modular example - English
+        run: |
+          cd examples/modular
+          echo "=== Testing modular example with English ==="
+          LANG=en_US.UTF-8 go run main.go
+
+      - name: Test with custom default language
+        run: |
+          cd examples/basic
+          echo "=== Testing with L10N_DEFAULT_LANGUAGE=ja ==="
+          L10N_DEFAULT_LANGUAGE=ja go run main.go | head -20
+
+      - name: Test skip detection
+        run: |
+          cd examples/basic
+          echo "=== Testing with L10N_SKIP_DETECTION=1 and LANG=ja_JP.UTF-8 ==="
+          L10N_SKIP_DETECTION=1 LANG=ja_JP.UTF-8 go run main.go | head -20
+
+  test-macos:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        go-version: ["1.21", "1.22", "1.23"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Run tests
+        run: go test -v ./...
+
+      - name: Test examples on macOS
+        run: |
+          cd examples/basic
+          go mod download
+          echo "=== Testing on macOS with LANG=ja_JP.UTF-8 ==="
+          LANG=ja_JP.UTF-8 go run main.go | head -20
+          echo ""
+          echo "=== Testing on macOS with LANG=en_US.UTF-8 ==="
+          LANG=en_US.UTF-8 go run main.go | head -20
+
+  test-windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        go-version: ["1.21", "1.22", "1.23"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Run tests
+        run: go test -v ./...
+
+      - name: Test examples on Windows
+        run: |
+          cd examples/basic
+          go mod download
+          echo "=== Testing on Windows ==="
+          go run main.go

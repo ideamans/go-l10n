@@ -121,6 +121,22 @@ l10n.Register("ja", l10n.LexiconMap{
 message := l10n.T("File saved successfully")
 ```
 
+#### F(phrase string, args ...interface{}) string
+
+フレーズを翻訳し、fmt.Sprintf でフォーマットします。
+
+```go
+message := l10n.F("Found %d files", count)
+```
+
+#### E(phrase string, args ...interface{}) error
+
+フレーズを翻訳し、fmt.Errorf でエラーとして返します。
+
+```go
+err := l10n.E("Failed to open %s", filename)
+```
+
 #### ForceLanguage(lang string)
 
 言語を強制的に設定します（主にテスト用）。
@@ -151,6 +167,28 @@ currentLang := l10n.GetCurrentLanguage()
 
 ```go
 l10n.DetectLanguage()
+```
+
+## サンプル
+
+`examples/` ディレクトリには、様々な使用パターンを示す実践的なサンプルが含まれています：
+
+- **[基本的な例](examples/basic/)**: 翻訳、言語切り替え、環境変数を含む基本的な使い方を示します
+- **[モジュラー例](examples/modular/)**: マルチパッケージアプリケーションでの翻訳の組織化方法を示します
+
+サンプルの実行方法：
+
+```bash
+# 基本的な例を実行
+cd examples/basic
+go run main.go
+
+# 日本語ロケールで実行
+LANG=ja_JP.UTF-8 go run main.go
+
+# モジュラー例を実行
+cd examples/modular
+go run .
 ```
 
 ## 使用例
@@ -200,6 +238,21 @@ func TestJapaneseMessages(t *testing.T) {
 }
 ```
 
+### フォーマット付き翻訳
+
+```go
+// F() を使用したフォーマット付きメッセージ
+count := 5
+message := l10n.F("Found %d files", count)
+// 英語: "Found 5 files"
+// 日本語: "5個のファイルが見つかりました" (登録されている場合)
+
+// E() を使用したフォーマット付きエラー
+filename := "config.json"
+err := l10n.E("Failed to read %s", filename)
+// 翻訳されたメッセージでエラーを返します
+```
+
 ## テスト
 
 ```bash
@@ -213,9 +266,9 @@ go test -v ./...
 go test -run TestT_BasicTranslation ./...
 ```
 
-## ライセンス
+## インスピレーション
 
-このプロジェクトは Movable Type のローカライゼーションシステムにインスパイアされています。
+このプロジェクトは Movable Type のローカライゼーションシステムにインスパイアされており、Go アプリケーションに対してシンプルながら強力な国際化アプローチを提供しています。
 
 ## 貢献
 
