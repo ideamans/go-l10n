@@ -114,28 +114,28 @@ func TestGetCurrentLanguage(t *testing.T) {
 
 func TestGetDefaultLanguage(t *testing.T) {
 	// 環境変数をクリア
-	os.Unsetenv("L10N_DEFAULT_LANGUAGE")
+	_ = os.Unsetenv("L10N_DEFAULT_LANGUAGE")
 	if getDefaultLanguage() != "en" {
 		t.Errorf("getDefaultLanguage without env var failed: expected 'en', got %q", getDefaultLanguage())
 	}
 
 	// 環境変数を設定
-	os.Setenv("L10N_DEFAULT_LANGUAGE", "fr")
+	_ = os.Setenv("L10N_DEFAULT_LANGUAGE", "fr")
 	if getDefaultLanguage() != "fr" {
 		t.Errorf("getDefaultLanguage with env var failed: expected 'fr', got %q", getDefaultLanguage())
 	}
 
 	// クリーンアップ
-	os.Unsetenv("L10N_DEFAULT_LANGUAGE")
+	_ = os.Unsetenv("L10N_DEFAULT_LANGUAGE")
 }
 
 func TestLanguageDetectionWithEnvironmentVariables(t *testing.T) {
 	// 環境変数をクリア
 	envVars := []string{"LANGUAGE", "LC_ALL", "LC_MESSAGES", "LANG"}
 	for _, env := range envVars {
-		os.Unsetenv(env)
+		_ = os.Unsetenv(env)
 	}
-	os.Unsetenv("L10N_DEFAULT_LANGUAGE")
+	_ = os.Unsetenv("L10N_DEFAULT_LANGUAGE")
 
 	tests := []struct {
 		name     string
@@ -153,11 +153,11 @@ func TestLanguageDetectionWithEnvironmentVariables(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// 環境変数をクリア
 			for _, env := range envVars {
-				os.Unsetenv(env)
+				_ = os.Unsetenv(env)
 			}
 
 			// テスト用環境変数を設定
-			os.Setenv(tt.envVar, tt.value)
+			_ = os.Setenv(tt.envVar, tt.value)
 
 			// 手動で言語検出ロジックを実行（テストモード検出を回避）
 			Language = getDefaultLanguage()
@@ -191,7 +191,7 @@ func TestLanguageDetectionWithEnvironmentVariables(t *testing.T) {
 			}
 
 			// クリーンアップ
-			os.Unsetenv(tt.envVar)
+			_ = os.Unsetenv(tt.envVar)
 		})
 	}
 
@@ -201,7 +201,7 @@ func TestLanguageDetectionWithEnvironmentVariables(t *testing.T) {
 
 func TestL10NSkipDetection(t *testing.T) {
 	// 環境変数を設定
-	os.Setenv("L10N_SKIP_DETECTION", "1")
+	_ = os.Setenv("L10N_SKIP_DETECTION", "1")
 
 	// 初期化前の状態を保存
 	originalLang := Language
@@ -220,13 +220,13 @@ func TestL10NSkipDetection(t *testing.T) {
 	}
 
 	// クリーンアップ
-	os.Unsetenv("L10N_SKIP_DETECTION")
+	_ = os.Unsetenv("L10N_SKIP_DETECTION")
 	Language = originalLang
 }
 
 func TestL10NDefaultLanguage(t *testing.T) {
 	// デフォルト言語を設定
-	os.Setenv("L10N_DEFAULT_LANGUAGE", "fr")
+	_ = os.Setenv("L10N_DEFAULT_LANGUAGE", "fr")
 
 	// テストモードで言語検出
 	DetectLanguage()
@@ -237,6 +237,6 @@ func TestL10NDefaultLanguage(t *testing.T) {
 	}
 
 	// クリーンアップ
-	os.Unsetenv("L10N_DEFAULT_LANGUAGE")
+	_ = os.Unsetenv("L10N_DEFAULT_LANGUAGE")
 	ResetLanguage()
 }

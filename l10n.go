@@ -8,17 +8,17 @@ import (
 	"golang.org/x/text/language"
 )
 
-// LexiconMap maps base phrases to translated phrases
+// LexiconMap maps base phrases to translated phrases.
 type LexiconMap map[string]string
 
-// WorldMap maps language codes to their respective lexicons
+// WorldMap maps language codes to their respective lexicons.
 type WorldMap map[string]LexiconMap
 
 var (
-	// Currently active language
+	// Currently active language.
 	Language = getDefaultLanguage()
 
-	// Forced language for testing (empty string means no forcing)
+	// Forced language for testing (empty string means no forcing).
 	forcedLanguage string
 )
 
@@ -66,7 +66,7 @@ func DetectLanguage() {
 }
 
 // Register merges translation phrases into the phrase map
-// Extension applications can use Register to add their own translation phrases
+// Extension applications can use Register to add their own translation phrases.
 func Register(lang string, lex LexiconMap) {
 	l, ok := World[lang]
 	if !ok {
@@ -79,7 +79,7 @@ func Register(lang string, lex LexiconMap) {
 	}
 }
 
-// T translates a phrase
+// T translates a phrase.
 func T(phrase string) string {
 	l, ok := World[Language]
 	if !ok {
