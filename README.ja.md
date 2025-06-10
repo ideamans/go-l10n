@@ -2,6 +2,9 @@
 
 [English README](README.md)
 
+[![Test](https://github.com/ideamans/go-l10n/actions/workflows/test.yml/badge.svg)](https://github.com/ideamans/go-l10n/actions/workflows/test.yml)
+[![Build Status](https://api.cirrus-ci.com/github/ideamans/go-l10n.svg)](https://cirrus-ci.com/github/ideamans/go-l10n)
+
 Movable Type のローカライゼーションシステムにインスパイアされた Go 用国際化（i18n）ライブラリ。自動言語検出と翻訳サポートを提供し、テスト対応の言語オーバーライド機能を備えています。
 
 ## 特徴

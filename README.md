@@ -2,6 +2,9 @@
 
 [日本語版 README はこちら / Japanese README](README.ja.md)
 
+[![Test](https://github.com/ideamans/go-l10n/actions/workflows/test.yml/badge.svg)](https://github.com/ideamans/go-l10n/actions/workflows/test.yml)
+[![Build Status](https://api.cirrus-ci.com/github/ideamans/go-l10n.svg)](https://cirrus-ci.com/github/ideamans/go-l10n)
+
 A Go internationalization (i18n) library inspired by Movable Type's localization system. It provides automatic language detection and translation support for Go applications with test-friendly language override capabilities.
 
 ## Features
@@ -167,28 +170,6 @@ Detects and sets the language from environment variables.
 
 ```go
 l10n.DetectLanguage()
-```
-
-## Examples
-
-The `examples/` directory contains practical examples demonstrating various usage patterns:
-
-- **[Basic Example](examples/basic/)**: Demonstrates fundamental usage including translations, language switching, and environment variables
-- **[Modular Example](examples/modular/)**: Shows how to organize translations in a multi-package application
-
-To run the examples:
-
-```bash
-# Run basic example
-cd examples/basic
-go run main.go
-
-# Run with Japanese locale
-LANG=ja_JP.UTF-8 go run main.go
-
-# Run modular example
-cd examples/modular
-go run .
 ```
 
 ## Usage Examples
