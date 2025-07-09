@@ -94,6 +94,14 @@ If set to a non-empty value, skips automatic language detection during initializ
 export L10N_SKIP_DETECTION=1
 ```
 
+### L10N_TEST_MODE
+
+Forces test mode behavior, which uses the default language (English) regardless of environment settings. This is useful for ensuring consistent behavior in non-test environments that require test-like language behavior.
+
+```bash
+export L10N_TEST_MODE=1
+```
+
 ## API Reference
 
 ### Type Definitions

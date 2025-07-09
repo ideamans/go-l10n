@@ -94,6 +94,14 @@ export L10N_DEFAULT_LANGUAGE=fr
 export L10N_SKIP_DETECTION=1
 ```
 
+### L10N_TEST_MODE
+
+テストモードの動作を強制し、環境設定に関係なくデフォルト言語（英語）を使用します。これは、テストのような言語動作を必要とする非テスト環境で一貫した動作を保証するのに便利です。
+
+```bash
+export L10N_TEST_MODE=1
+```
+
 ## API リファレンス
 
 ### 型定義

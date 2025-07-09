@@ -115,6 +115,11 @@ var (
 
 // isTestMode checks if the code is running in test mode
 func isTestMode() bool {
+	// Check if test mode is explicitly set via environment variable
+	if os.Getenv("L10N_TEST_MODE") == "1" {
+		return true
+	}
+
 	// During Go test execution, the executable name contains .test
 	// or the arguments contain test-related flags
 	for _, arg := range os.Args {
